@@ -12,10 +12,12 @@ class planner {
         year = c;
         description = d;
     }
+
     void print (){
         cout<< "date: "<< day<<"." << month << "." << year << "\n";
         cout<< "description: " << description << "\n";
     }
+
     void changeDate(int a, int b, int c){
         day = a;
         month = b;
@@ -25,11 +27,12 @@ class planner {
         description = d;
     }
 
-    
+    protected:
     string description;    
     int day;
     int month;
     int year;    
+    string type;
 };
 
 //making a class for the children class, 'birthdays'
@@ -47,6 +50,7 @@ class birthdays: public planner {//the : public planner makes the class a child 
         cout<< "it is "<< name <<"'s "<< age << " birthday!\n";
     };
 
+    private:
     int age;
     string name;
 };
@@ -66,28 +70,33 @@ class profile {
             int e;
             cout << "Who's birthday is it?\n";
             cin >> f;
-            cout << "How old are hey turning?\n";
+            cout << "How old are they turning?\n";
             cin >> e;
             birthdays plan (a,b,c,d,e,f);
+            bdays.push_back(plan);
         }
-        else (choice == "general" || choice == "General" || choice == "GENERAL"){
+        else if (choice == "general" || choice == "General" || choice == "GENERAL"){
             planner plan(a,b,c,d);
+            general.push_back(plan);
         }
         
-        //new idea, plan can be added to a list of plans so the profile can keep track
-        list.push_back(plan);
     }
     //function to print events
     void printEvents(){
-        for (int i = 0; i < list.size(); i++){
-            planner temp = list[i];
+        for (int i = 0; i < general.size(); i++){
+            planner temp = general[i];
+            temp.print();
+        }
+        for (int i = 0; i < bdays.size(); i++){
+            birthdays temp = bdays[i];
             temp.print();
         }
     }
     
     private:
     string name;
-    vector <planner> list;
+    vector <planner> general;
+    vector <birthdays> bdays;
     string choice;
     
     
@@ -95,18 +104,37 @@ class profile {
 
     
     int main (){
+    string answer;
+    string name;
+    bool isEnd = false;
+    int day;
+    int month;
+    int year;
+    string d;
 
-    //test
-    //lets say the user imputs that they want to create a profile and their name is bob
-    profile a ("bob");
-    //now bob wants to add to his calendar that he has a meeting on the 3rd of November 2020
-    a.makePlan(3,11,2020, "Meeting");
-    //now bob wabts to add to his planner that he has a dentist appointment on the 15th of April 2021
-    a.makePlan(15,6,2021, "Dentist Appt.");
-    //now bob has his friends brithday coming up
-    a.makePlan(10,10,2022, "Getting dinner");
-    //printing out dates from the calendar
-    a.printEvents();
-
+    cout<< "Would you like to make a planner?\n";
+    cin >> answer;
+    if (answer == "y" || answer == "yes" || answer == "Yes"){
+        cout << "What is your name?\n";
+        cin>> name;
+        profile a (name);
+        while (isEnd != true){
+            cout<< "Would you like to add an event? \n";
+            cin >> answer;
+             if (answer == "y" || answer == "yes" || answer == "Yes"){
+                 cout<< "Input day: \n"; 
+                 cin >> day;
+                 cout<< "Input month: \n";
+                 cin >> month;
+                 cout<< "Input year: \n";
+                 cin >> year;
+                 cout << "Input description: \n";
+                 cin >> d;
+                 a.makePlan(day, month, year, d);
+             }
+             else {isEnd = true;}
+        };
+        a.printEvents();
+    };
 
     };
